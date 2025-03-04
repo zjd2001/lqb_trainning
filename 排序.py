@@ -86,12 +86,12 @@ def partition(data,left,right):#归位函数
 
 # 堆排序
 #父为i，左孩子为2i+1，右孩子为2i+2。所有子的父都是(i-1)//2
-# 堆向下调整，为堆顶那一个值找合适位置（此时除了堆顶值，其他值都是符合父比子大），（用于建堆，对一个大堆中的每个小堆进行，最终整个大堆构造完成）
+# 堆向下调整，为堆顶那一个值找合适位置（此时除了堆顶值，其他值都是符合父比子大），（用于建堆（大根堆），对一个大堆中的每个小堆进行，最终整个大堆构造完成）
 def sift(li, low, high):
     '''
     :param li: 列表
-    :param low: 堆根节点位置
-    :param high: 堆最后一个元素的位置
+    :param low: 堆根节点的下标
+    :param high: 堆最后一个元素的下标
     :return:
     '''
     i = low  # i最开始指向根节点
@@ -115,25 +115,76 @@ def sift(li, low, high):
 #堆排序实现
 def heap_sort(li):
     n=len(li)
-    for i in range((n-2)//2,-1,-1): #因为每个子节点的父是(i-1)//2,而n是从0开始的下标，所以是n-2。-1是结束值，因为左不包所以结束在0，即堆顶。第二个-1是步长，即倒序。
-        #i指建堆时 调整的部分（小堆） 的根的下标
+    for i in range((n-2)//2,-1,-1): #因为每个子节点的父是(i-1)//2,而n是从0开始的下标，所以是n-2。-1是结束值，因为右不包所以结束在0，即堆顶。第二个-1是步长，即倒序。
+        #i指建堆时 调整的部分（小子堆） 的根的下标
         #这样就倒着遍历了全部非叶节点
-        sift(li,i,n-1) #将high值设置为整个堆的最后一个值，就可以达到sift函数中需要的效果，避免了每个部分（每个小堆）要重新算high值的麻烦。
+        sift(li,i,n-1) #将high值设置为整个堆的最后一个值，就可以达到sift函数中需要的效果，避免了每个部分（每个小子堆）要重新算high值的麻烦。
         #这样就倒着依次以非叶节点为小堆堆顶，将每个小堆建好，所有节点都符合了父比子大，最后大堆就建好了
-    #建堆完成
+    #建堆完成（建的是大根堆）
 
     #排序
-    for i in range (n-1,-1,-1): #i指向当前堆的最后一个元素
+    for i in range (n-1,-1,-1): #i指向当前堆的最后一个元素，倒序遍历至第一个元素
         li[0],li[i]=li[i],li[0] #将最后一个元素与堆顶交换，即将堆顶值（最大值）存在了列表最后一位，不断循环后列表后面就是有序区
         sift(li,0,i-1) #为换到堆顶的那个元素寻找合适位置，结果就是将当前无序区中的最大值换上了堆顶
 
 
-li=[i for i in range(100)]
+#li=[i for i in range(100)]
+#random.shuffle(li)
+#print(li)
+
+#heap_sort(li)
+#print(li)
+
+
+#使用堆排序库
+import heapq
+
+li=list(range(100))
 random.shuffle(li)
 print(li)
 
-heap_sort(li)
-print(li)
+heapq.heapify(li) #建小根堆
+#print(li)
+
+n=len(li)
+#for i in range(n):
+#    print(heapq.heappop(li),end=',') #heapq.heappop返回堆顶元素，同时确保剩余元素仍然保持小分堆属性
 
 
+#topK问题：找出列表中前K大的数
 
+#改成用于建立小根堆
+def sift_topk(li, low, high):
+    i = low
+    j = 2 * i + 1
+    tmp = li[low]
+    while j <= high:
+        if j + 1 <= high and li[j + 1] < li[j]:  #改为了<
+            j = j + 1
+        if li[j] < tmp: #改为了<
+            li[i] = li[j]
+            i = j
+            j = 2 * i + 1
+        else:
+            li[i] = tmp
+            break
+    else:
+        li[i] = tmp
+
+def topk(li,k):
+    heap=li[0:k] #取k个数建立初始堆
+    for i in range((k-2)//2,-1,-1):
+        sift_topk(heap,i,k-1) #heap变成了小根堆（k1），会把K1中最小的数换到堆顶
+    #1.建立小根堆
+    for i in range(k,len(li)-1): #遍历出了k1的剩下的列表
+        if li[i]>heap[0]: #如果有比k1中最小的数大的
+            heap[0]=li[i] #用这个数替换k1中最小的那个
+            sift_topk(heap,0,k-1) #在进行一遍建堆，又把最小的数换到堆顶
+    #2.遍历，最后前k大的数都存进了heap
+    for i in range(k-1,-1,-1): #指向heap最后一位，倒序至第一位
+        heap[0],heap[i]=heap[i],heap[0] #将最后一个元素与堆顶交换，即将堆顶值（最小值）存在了列表最后一位，不断循环后列表后面就是有序区
+        sift_topk(heap,0,i-1) #为换到堆顶的那个元素寻找合适位置，结果就是将当前无序区中的最小值换上了堆顶
+    #3.排序
+    return heap
+
+print(topk(li,10))
