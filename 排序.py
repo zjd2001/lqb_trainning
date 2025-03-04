@@ -13,7 +13,7 @@ def bubble_sort(li):
             return
 
 li=[random.randint(0,1000) for i in range(1000)]
-print(li)
+#print(li)
 #bubble_sort(li)
 #print(li)
 #A=list(reversed(li))
@@ -53,7 +53,7 @@ def insert_sort(li):
         li[j+1] = tmp #while循环结束时，是牌比它前一位大的时候，因为j在循环结束时代表的是前一位，所以牌的最终位置应该在前一位之后即j+1。如果牌是最小的，那么当它比到最后一轮，li[0]>tmp成立，j=-1，下一个循环开启时因为j<0而停止，li[j+1]=li[0],牌被正确放在了第一位
         print(li)
 
-li = [3,2,4,1,5,7,9,6,8]
+#li = [3,2,4,1,5,7,9,6,8]
 #print(li)
 #insert_sort(li)
 
@@ -80,13 +80,13 @@ def partition(data,left,right):#归位函数
 
 #partition(li,0,len(li)-1)
 #print(li)
-quick_sort(li,0,len(li)-1)
-print(li)
+#quick_sort(li,0,len(li)-1)
+#print(li)
 
 
 # 堆排序
-
-# 堆向下调整，为堆顶那一个值找合适位置（此时除了堆顶值，其他值都是符合父比子大）
+#父为i，左孩子为2i+1，右孩子为2i+2。所有子的父都是(i-1)//2
+# 堆向下调整，为堆顶那一个值找合适位置（此时除了堆顶值，其他值都是符合父比子大），（用于建堆，对一个大堆中的每个小堆进行，最终整个大堆构造完成）
 def sift(li, low, high):
     '''
     :param li: 列表
@@ -112,9 +112,28 @@ def sift(li, low, high):
         li[i] = tmp  # j位置没数了，已经找到最后一层了，把tmp放在叶子节点上
 
 
+#堆排序实现
+def heap_sort(li):
+    n=len(li)
+    for i in range((n-2)//2,-1,-1): #因为每个子节点的父是(i-1)//2,而n是从0开始的下标，所以是n-2。-1是结束值，因为左不包所以结束在0，即堆顶。第二个-1是步长，即倒序。
+        #i指建堆时 调整的部分（小堆） 的根的下标
+        #这样就倒着遍历了全部非叶节点
+        sift(li,i,n-1) #将high值设置为整个堆的最后一个值，就可以达到sift函数中需要的效果，避免了每个部分（每个小堆）要重新算high值的麻烦。
+        #这样就倒着依次以非叶节点为小堆堆顶，将每个小堆建好，所有节点都符合了父比子大，最后大堆就建好了
+    #建堆完成
+
+    #排序
+    for i in range (n-1,-1,-1): #i指向当前堆的最后一个元素
+        li[0],li[i]=li[i],li[0] #将最后一个元素与堆顶交换，即将堆顶值（最大值）存在了列表最后一位，不断循环后列表后面就是有序区
+        sift(li,0,i-1) #为换到堆顶的那个元素寻找合适位置，结果就是将当前无序区中的最大值换上了堆顶
 
 
+li=[i for i in range(100)]
+random.shuffle(li)
+print(li)
 
+heap_sort(li)
+print(li)
 
 
 
