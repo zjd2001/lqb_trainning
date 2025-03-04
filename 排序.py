@@ -141,7 +141,7 @@ import heapq
 
 li=list(range(100))
 random.shuffle(li)
-print(li)
+#print(li)
 
 heapq.heapify(li) #建小根堆
 #print(li)
@@ -187,11 +187,12 @@ def topk(li,k):
     #3.排序heap
     return heap
 
-print(topk(li,10))
+#print(topk(li,10))
 
 
 #归并排序
 
+#归并
 #当无序列表从low~mid（左半区）有序，mid+1~high（右半区）也有序，对整个列表排序
 def merge(li,low,mid,high):
     i=low
@@ -212,3 +213,7 @@ def merge(li,low,mid,high):
         ltmp.append(li[j]) #左半区没了，将右半区剩的都写进去
         j+=1
     li[low:high+1]=ltmp #把ltmp中的重新写回li
+
+li=[2,4,6,8,1,3,5,7]
+merge(li,0,3,7)
+print(li)
