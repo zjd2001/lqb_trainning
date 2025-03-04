@@ -184,7 +184,31 @@ def topk(li,k):
     for i in range(k-1,-1,-1): #指向heap最后一位，倒序至第一位
         heap[0],heap[i]=heap[i],heap[0] #将最后一个元素与堆顶交换，即将堆顶值（最小值）存在了列表最后一位，不断循环后列表后面就是有序区
         sift_topk(heap,0,i-1) #为换到堆顶的那个元素寻找合适位置，结果就是将当前无序区中的最小值换上了堆顶
-    #3.排序
+    #3.排序heap
     return heap
 
 print(topk(li,10))
+
+
+#归并排序
+
+#当无序列表从low~mid（左半区）有序，mid+1~high（右半区）也有序，对整个列表排序
+def merge(li,low,mid,high):
+    i=low
+    j=mid+1
+    ltmp=[] #临时列表
+    while i<=mid and j<=high: #左右半区还有数
+        if li[i]<li[j]: #从第一个数开始，两边相比，小的写进ltmp
+            ltmp.append(li[i])
+            i+=1 #然后在继续比
+        else:
+            ltmp.append(li[j])
+            j+=1
+    #while执行完，肯定有一边没数了
+    while i<=mid:
+        ltmp.append(li[i]) #右半区没了，将左半区剩的都写进去
+        i+=1
+    while j<=high:
+        ltmp.append(li[j]) #左半区没了，将右半区剩的都写进去
+        j+=1
+    li[low:high+1]=ltmp #把ltmp中的重新写回li
