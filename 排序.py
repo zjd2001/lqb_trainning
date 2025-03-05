@@ -214,6 +214,17 @@ def merge(li,low,mid,high):
         j+=1
     li[low:high+1]=ltmp #把ltmp中的重新写回li
 
-li=[2,4,6,8,1,3,5,7]
+li=[4,8,2,6,7,3,1,5]
 merge(li,0,3,7)
+print(li)
+
+#归并排序实现
+def merge_sort(li,low,high):
+    if low<high: #至少有两个元素
+        mid=(low+high)//2 #拆分成两半
+        merge_sort(li,low,mid) #先用递归不断拆分至单个元素
+        merge_sort(li,mid+1,high)
+        merge(li,low,mid,high) #最后一轮递归完开始不断合并，实现排序
+
+merge_sort(li,0,7)
 print(li)
