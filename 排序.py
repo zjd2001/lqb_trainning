@@ -12,7 +12,7 @@ def bubble_sort(li):
         if not exchange:#没有发生交换，说明目前的无序区本来就是有序的，不用再排了
             return
 
-li=[random.randint(0,1000) for i in range(1000)]
+#li=[random.randint(0,1000) for i in range(1000)]
 #print(li)
 #bubble_sort(li)
 #print(li)
@@ -86,6 +86,7 @@ def partition(data,left,right):#归位函数
 
 # 堆排序
 #父为i，左孩子为2i+1，右孩子为2i+2。所有子的父都是(i-1)//2
+
 # 堆向下调整，为堆顶那一个值找合适位置（此时除了堆顶值，其他值都是符合父比子大），（用于建堆（大根堆），对一个大堆中的每个小堆进行，最终整个大堆构造完成）
 def sift(li, low, high):
     '''
@@ -105,7 +106,7 @@ def sift(li, low, high):
             li[i] = li[j]  # 将这个孩子向上移
             i = j  # 往下看一层
             j = 2 * i + 1
-        else:  # tmp比j所指的值大，把tmp放在i的位置上
+        else:  # tmp比j所指的值大，把tmp放在此时i的位置上
             li[i] = tmp
             break
     else:
@@ -143,10 +144,10 @@ li=list(range(100))
 random.shuffle(li)
 #print(li)
 
-heapq.heapify(li) #建小根堆
+#heapq.heapify(li) #建小根堆
 #print(li)
 
-n=len(li)
+#n=len(li)
 #for i in range(n):
 #    print(heapq.heappop(li),end=',') #heapq.heappop返回堆顶元素，同时确保剩余元素仍然保持小分堆属性
 
@@ -214,17 +215,41 @@ def merge(li,low,mid,high):
         j+=1
     li[low:high+1]=ltmp #把ltmp中的重新写回li
 
-li=[4,8,2,6,7,3,1,5]
-merge(li,0,3,7)
-print(li)
+#li=[4,8,2,6,7,3,1,5]
+#merge(li,0,3,7)
+#print(li)
 
 #归并排序实现
 def merge_sort(li,low,high):
     if low<high: #至少有两个元素
         mid=(low+high)//2 #拆分成两半
         merge_sort(li,low,mid) #先用递归不断拆分至单个元素
-        merge_sort(li,mid+1,high)
+        merge_sort(li,mid+1,high) #一直都是li，因为输入的是下标，从列表里取一段
         merge(li,low,mid,high) #最后一轮递归完开始不断合并，实现排序
 
-merge_sort(li,0,7)
+#merge_sort(li,0,7)
+#print(li)
+
+
+#希尔排序
+def insert_sort_gap(li,gap): #由插入排序修改，gap指分组数。（其实就是把插入排序中所有的1改成了gap）
+    #这个函数是对 跳跃分组后 每个组内元素同时进行插入排序（第一组第二个、第一个值比完了，比第二组第二个、第一个值..., 到第gap组第二个、第一个值比完了，再比第一组第三个、第二个值....)
+    for i in range(gap,len(li)): #每组第一张牌都默认为有序区，所以从gap开始，即第一组的第二张牌开始
+        tmp=li[i]  #待插入的牌
+        j=i-gap #有序区的最后一个
+        while j>=0 and li[j]>tmp: #若有序区的最后一个数比牌的值大
+            li[j+gap]=li[j] #将有序区最后一个挪到同组的后一位
+            j-=gap #j在同组内向前一位
+        li[j+gap]=tmp #while循环结束时，是牌比它同组前一位大的时候，因为j在循环结束时代表的是同组里前一位，所以牌的最终位置应该在同组前一位之后即j+gap
+
+def shell_sort(li): #排序实现
+    d=len(li)//2 #初始分组的组数，每组只有两个元素
+    while d>=1: #只要组数大于1
+        insert_sort_gap(li,d) #就对每个组同时进行插入排序
+        d//=2 #组数每次循环减少一半。
+        #每轮结束后列表并没有完全有序，但更接近有序
+        #最后一轮d=1，即完整的列表进行一遍插入排序
+
+print(li)
+shell_sort(li)
 print(li)
