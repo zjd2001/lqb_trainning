@@ -140,8 +140,8 @@ def heap_sort(li):
 #使用堆排序库
 import heapq
 
-li=list(range(100))
-random.shuffle(li)
+#li=list(range(100))
+#random.shuffle(li)
 #print(li)
 
 #heapq.heapify(li) #建小根堆
@@ -250,16 +250,21 @@ def shell_sort(li): #排序实现
         #每轮结束后列表并没有完全有序，但更接近有序
         #最后一轮d=1，即完整的列表进行一遍插入排序
 
-print(li)
-shell_sort(li)
-print(li)
+#print(li)
+#shell_sort(li)
+#print(li)
 
 #计数排序
-def count_sort(li,max_count=100): #要知道列表中的最大值
-    count=[0 for _ in range(max_count+1)]
-    for val in li:
-        count[val]+=1
+def count_sort(li,max_count=100): #列表中最小值为0，max_count是列表中的最大值
+    count=[0 for _ in range(max_count+1)] #创建一个大小为下标为从0到max_count+1的列表count（因为右不包，所以要+1才能对应li的所有值），用于记录li中每个值出现的次数
+    for val in li: #遍历li的每个值
+        count[val]+=1 #对于列表li中的每一个值，在count列表对应下标位置处增加1，表示该值出现了一次
     li.clear() #把li清空
-    for ind,val in enumerate(count):
-        for i in range(val):
+    for ind,val in enumerate(count): #从0开始遍历count列表中的每个元素及其下标。ind代表数值（下标），val代表该数值出现的次数。
+        for i in range(val): #根据数值出现的次数，将对应的数值添加到列表li中
             li.append(ind) #写回li
+
+li=[random.randint(0,100) for _ in range(1000)]
+print(li)
+count_sort(li)
+print(li)
