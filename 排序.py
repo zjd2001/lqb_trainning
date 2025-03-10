@@ -253,3 +253,13 @@ def shell_sort(li): #排序实现
 print(li)
 shell_sort(li)
 print(li)
+
+#计数排序
+def count_sort(li,max_count=100): #要知道列表中的最大值
+    count=[0 for _ in range(max_count+1)]
+    for val in li:
+        count[val]+=1
+    li.clear() #把li清空
+    for ind,val in enumerate(count):
+        for i in range(val):
+            li.append(ind) #写回li
