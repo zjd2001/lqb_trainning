@@ -1,8 +1,8 @@
 #顺序查找
-def linear_search(li,val):
-    for ind ,v in enumerate(li):
+def linear_search(li,val): #从列表li里找val
+    for ind ,v in enumerate(li): #同时获取列表中每个元素的索引 ind 及其值 v
         if v==val:
-            return ind
+            return ind #返回下标
     else:
         return None
 
