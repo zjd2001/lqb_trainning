@@ -295,20 +295,21 @@ print(li)
 
 
 #基数排序
+#基于桶排序，将整数按位数比较，从个位开始只按个位大小排序，再按十位排序。。。最后按最大位排好，就完成了排序
 def radix_sort(li):
-    max_num=max(li) #最大值
-    it=0
-    while 10**it<=max_num:
-        buckets=[[] for _ in range(10)]
-        for var in li:
-            digit=(var//10**it)%10
-            buckets[digit].append(var)
-        li.clear()
-        for buc in buckets:
-            li.extend(buc)
-        it+=1
+    max_num=max(li) #最大值，9->1,99->2,888->3,10000->5
+    it=0 ###代表当前处理的是哪一位，从个位开始
+    while 10**it<=max_num: #循环直到处理完所有位数，10**it代表10的it次方
+        buckets=[[] for _ in range(10)] #创建十个桶，对应数字0-9，buckets是一个二维列表（大桶）
+        for var in li: #遍历li中的数
+            digit=(var//10**it)%10 #取出当前处理的位上的数字
+            buckets[digit].append(var) #把这个数var放进对应的小桶里
+        li.clear() #在当前的位数下，所有数都放进桶了，就清空li
+        for buc in buckets: #遍历所有桶
+            li.extend(buc) #将各个桶里的元素按照它们所在的桶的顺序（即已经根据当前位数排好序的顺序）合并回到 li 中
+        it+=1 #完成一位排序后，处理下一位数字
 
-li=list(range(1000))
-random.shuffle(li)
-radix_sort(li)
-print(li)
+#li=list(range(1000))
+#random.shuffle(li)
+#radix_sort(li)
+#print(li)
