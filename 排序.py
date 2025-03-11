@@ -264,7 +264,31 @@ def count_sort(li,max_count=100): #列表中最小值为0，max_count是列表�
         for i in range(val): #根据数值出现的次数，将对应的数值添加到列表li中
             li.append(ind) #写回li
 
-li=[random.randint(0,100) for _ in range(1000)]
+#li=[random.randint(0,100) for _ in range(1000)]
+#print(li)
+#count_sort(li)
+#print(li)
+
+
+#桶排序
+#把整个列表按范围划分成多块（桶），每块内进行排序，最后合起来
+def bucket_sort(li,n=100,max_num=10000): #分成100个桶，列表中最大值为10000
+    buckets=[[] for _ in range(n)] #创建二维列表，包含n个空列表（100个桶）的大列表（大桶）
+    for var in li: #遍历li中的元素
+        i=min(var//(max_num//n),n-1) #i表示把var放进几号桶，目前是每max_num//n=100个数一个桶，如min（89//100=0，99）=0号桶，min(10000//100=100,99)=99号桶
+        buckets[i].append(var) #把var放进对应桶
+        # 每放一个值进小桶，就进行一次桶内排序
+        for j in range(len(buckets[i])-1,0,-1): #反向遍历，将小的数冒泡到前面
+            if buckets[i][j]<buckets[i][j-1]:
+                buckets[i][j],buckets[i][j-1]=buckets[i][j-1],buckets[i][j]
+            else:
+                break
+    sorted_li=[]
+    for buc in buckets: #遍历所有小桶
+        sorted_li.extend(buc) #依次添加到新列表
+    return sorted_li
+
+li=[random.randint(0,10000) for i in range(100000)]
 print(li)
-count_sort(li)
+li=bucket_sort(li)
 print(li)
