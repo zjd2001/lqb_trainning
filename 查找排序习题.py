@@ -140,10 +140,10 @@ class Solution_22:
         """
         h=len(matrix) #行数
         if h==0:
-            return False #列表里没有值，直接返回
+            return False #如果行数为0，意味着整个矩阵是空的（没有行）
         w=len(matrix[0]) #列数
         if w==0:
-            return False # 列表里没有值，直接返回
+            return False # 如果在有至少一行的前提下，发现这一行的元素数量为0（即宽度为0），这意味着虽然有行但每一行都没有元素
         left=0
         right=w*h-1
         #使用修改的二分查找
