@@ -40,6 +40,43 @@ class Solution:
         ss.sort() #排序函数
         tt.sort()
         return ss==tt
+
+#答案2
+class Solution_2:
+    def isAnagram(self,s,t):
+        """
+        判断两个字符串是否为字母异位词
+        :param s: str
+        :param t: str
+        :return: bool
+        """
+        return sorted(s)==sorted(t)
+
+#答案3
+class Solution_3:
+    def isAnagram(self,s,t):
+        """
+        判断两个字符串是否为字母异位词
+        :param s: str
+        :param t: str
+        :return: bool
+        """
+        dict1={} #用两个字典保存两个字符串中各个字母的数量
+        dict2={}
+        for ch in s:
+            if ch in dict1:
+                dict1[ch]+=1
+            else:
+                dict1[ch]=1
+            #或者用dict[ch]=dict1.get(ch,0)+1
+        for ch in t:
+            if ch in dict2:
+                dict2[ch]+=1
+            else:
+                dict2[ch]=1
+        return dict1==dict2
+
+
 #给一个m*n的二维列表，查找一个数是否存在。（每一行的列表从左向右已经排好，每一行第一个数比上一行最后一个数大。）
 
 #给定一个列表和一个整数，找到两个数的下标，使得两数之和为给定的整数。保证有且只有一个结果。例如：列表[1,2,5,4]，目标整数3,1+2=3，结果为（0,1）。
