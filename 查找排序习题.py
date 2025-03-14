@@ -95,7 +95,7 @@ def binary_search(li,val):
 A=[[1 ,3 ,5 ,7 ],
    [10,11,16,20],
    [23,30,34,50]]
-print(binary_search(A,3))
+#print(binary_search(A,3))
 
 #答案1
 class Solution_21:
@@ -110,6 +110,7 @@ class Solution_21:
             if target in line:
                 return True
         return False
+
 
 #答案2
 
@@ -165,3 +166,69 @@ class Solution_22:
 
 #给定一个列表和一个整数，找到两个数的下标，使得两数之和为给定的整数。保证有且只有一个结果。例如：列表[1,2,5,4]，目标整数3,1+2=3，结果为（0,1）。
 
+#自己写
+def count(li,num):
+    output=[]
+    for i in range(len(li)):
+        for j in range(i+1,len(li)):
+                if li[i]+li[j]==num:
+                    output=[i,j]
+    return output
+
+li=[1,5,4,2]
+num=3
+output=count(li,num)
+print(output)
+
+#答案1
+class Solution_31:
+    def twoSum(self,nums,target):
+        """
+        :param s: List[int]
+        :param t: int
+        :return: List[int]
+        """
+        n=len(nums)
+        for i in range(n):
+            for j in range(i+1,n):
+                if nums[i]+nums[j]==target:
+                    return sorted([i,j])
+
+
+#答案2
+class Solution_32:
+    def twoSum(self,nums,target):
+        """
+        :param s: List[int]
+        :param t: int
+        :return: List[int]
+        """
+        #利用二分查找去找b=target-a，但要先排序
+        new_nums=[[num,i] for i , num in enumerate(nums)] #新建一个二位列表，存储原列表的数和下标，保证排序后还能知道原来的下标
+        new_nums.sort(key=lambda x:x[0]) #对二位列表指定按第0列即num排序
+
+        for i in range(len(new_nums)):
+            a=new_nums[i][0]
+            b=target-a #b应该是和减去a，再去查找b就可以了
+
+            if b>=a:
+                j=self.binary_search(new_nums,i+1,len(new_nums)-1,b) #b比a大，就只在右边找
+            else:
+                j=self.binary_search(new_nums,0,i-1,b) #b比a小
+            if j:
+                break #没找到b，即不存在两个数之和等于target
+
+        return sorted([ new_nums[i][1] , new_nums[j][1] ]) #返回排序前的下标
+
+    #调用的二分查找
+    def binary_search(self,li,left,right,val):
+        while left<=right:
+            mid=(left+right)//2
+            if li[mid][0]==val:
+                return mid
+            elif li[mid][0]>val:
+                right=mid-1
+            else:
+                left=mid+1
+        else:
+            return None
