@@ -140,8 +140,8 @@ def heap_sort(li):
 #使用堆排序库
 import heapq
 
-li=list(range(100))
-random.shuffle(li)
+#li=list(range(100))
+#random.shuffle(li)
 #print(li)
 
 #heapq.heapify(li) #建小根堆
@@ -250,16 +250,66 @@ def shell_sort(li): #排序实现
         #每轮结束后列表并没有完全有序，但更接近有序
         #最后一轮d=1，即完整的列表进行一遍插入排序
 
-print(li)
-shell_sort(li)
-print(li)
+#print(li)
+#shell_sort(li)
+#print(li)
 
 #计数排序
-def count_sort(li,max_count=100): #要知道列表中的最大值
-    count=[0 for _ in range(max_count+1)]
-    for val in li:
-        count[val]+=1
+def count_sort(li,max_count=100): #列表中最小值为0，max_count是列表中的最大值
+    count=[0 for _ in range(max_count+1)] #创建一个大小为下标为从0到max_count+1的列表count（因为右不包，所以要+1才能对应li的所有值），用于记录li中每个值出现的次数
+    for val in li: #遍历li的每个值
+        count[val]+=1 #对于列表li中的每一个值，在count列表对应下标位置处增加1，表示该值出现了一次
     li.clear() #把li清空
-    for ind,val in enumerate(count):
-        for i in range(val):
+    for ind,val in enumerate(count): #从0开始遍历count列表中的每个元素及其下标。ind代表数值（下标），val代表该数值出现的次数。
+        for i in range(val): #根据数值出现的次数，将对应的数值添加到列表li中
             li.append(ind) #写回li
+
+#li=[random.randint(0,100) for _ in range(1000)]
+#print(li)
+#count_sort(li)
+#print(li)
+
+
+#桶排序
+#把整个列表按范围划分成多块（桶），每块内进行排序，最后合起来
+def bucket_sort(li,n=100,max_num=10000): #分成100个桶，列表中最大值为10000
+    buckets=[[] for _ in range(n)] #创建二维列表，包含n个空列表（100个桶）的大列表（大桶）
+    for var in li: #遍历li中的元素
+        i=min(var//(max_num//n),n-1) #i表示把var放进几号桶，目前是每max_num//n=100个数一个桶，如min（89//100=0，99）=0号桶，min(10000//100=100,99)=99号桶
+        buckets[i].append(var) #把var放进对应桶
+        # 每放一个值进小桶，就进行一次桶内排序
+        for j in range(len(buckets[i])-1,0,-1): #反向遍历，将小的数冒泡到前面
+            if buckets[i][j]<buckets[i][j-1]:
+                buckets[i][j],buckets[i][j-1]=buckets[i][j-1],buckets[i][j]
+            else:
+                break
+    sorted_li=[]
+    for buc in buckets: #遍历所有小桶
+        sorted_li.extend(buc) #依次添加到新列表
+    return sorted_li
+
+li=[random.randint(0,10000) for i in range(100000)]
+print(li)
+li=bucket_sort(li)
+print(li)
+
+
+#基数排序
+#基于桶排序，将整数按位数比较，从个位开始只按个位大小排序，再按十位排序。。。最后按最大位排好，就完成了排序
+def radix_sort(li):
+    max_num=max(li) #最大值，9->1,99->2,888->3,10000->5
+    it=0 ###代表当前处理的是哪一位，从个位开始
+    while 10**it<=max_num: #循环直到处理完所有位数，10**it代表10的it次方
+        buckets=[[] for _ in range(10)] #创建十个桶，对应数字0-9，buckets是一个二维列表（大桶）
+        for var in li: #遍历li中的数
+            digit=(var//10**it)%10 #取出当前处理的位上的数字
+            buckets[digit].append(var) #把这个数var放进对应的小桶里
+        li.clear() #在当前的位数下，所有数都放进桶了，就清空li
+        for buc in buckets: #遍历所有桶
+            li.extend(buc) #将各个桶里的元素按照它们所在的桶的顺序（即已经根据当前位数排好序的顺序）合并回到 li 中
+        it+=1 #完成一位排序后，处理下一位数字
+
+#li=list(range(1000))
+#random.shuffle(li)
+#radix_sort(li)
+#print(li)
