@@ -47,11 +47,11 @@ def maze_path_stack(x1, y1, x2, y2): #起点坐标和终点坐标
 #print(maze_path_stack(1,1,8,8))
 
 
-#队列：广度优先搜索。从有一个节点开始，寻找所有接下来可以走的点，继续不断寻找，直到找到出口。使用队列存储当前正在考虑的节点
+#队列：广度优先搜索。从有一个节点开始，寻找所有接下来可以走的点，继续不断寻找，直到找到出口。使用队列存储当前正在考虑的节点。走过的节点都已经出队
 from collections import deque
 
 def maze_path_queue(x1, y1, x2, y2):
-    queue = deque()
+    queue = deque() #创建队列queue
     queue.append((x1, y1, -1)) #将起点存入队列(三元组)，第三位-1是父节点的下标，起点下标是0，所以父节点设为-1
     path = [] #存出队的节点，用来最后还原路径
 
@@ -80,13 +80,14 @@ def print_r(path):
 
     while curNode[2] != -1: #curNode中第三列不为-1，即不是起点
         real_path.append((curNode[0], curNode[1])) #存入节点坐标，或表示为curNode[0:2]
-        curNode = path[curNode[2]] #从path中找到父节点，不断循环存入real_path，这样就把走通的路径还原出来了
+        curNode = path[curNode[2]] #从path中找到父节点(再找到父节点的父节点...不断循环存入real_path，这样就把走通的路径还原出来了)
 
     #循环到curNode=-1停止，此时起点还没放入
     real_path.append(curNode[0:2]) #放入起点
 
     real_path.reverse() #将其倒序
+    #print(real_path)
     for node in real_path:
-        print(node)
+       print(node) #打印路径
 
 print(maze_path_queue(1,1,8,8))
