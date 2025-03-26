@@ -1,11 +1,12 @@
+#实现链表
 class LinkList:
-    class Node:
+    class Node: #嵌套类，表示链表中的节点
         def __init__(self, item=None):
             self.item = item
             self.next = None
 
-    class LinkListIterator:
-        def __init__(self, node):
+    class LinkListIterator: #定义迭代器类，支持对链表的迭代操作
+        def __init__(self, node): #初始化一个节点Node
             self.node = node
         def __next__(self):
             if self.node:
