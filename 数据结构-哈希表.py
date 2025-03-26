@@ -1,3 +1,5 @@
+#拉链法解决哈希冲突
+
 #实现链表
 class LinkList:
     class Node: #嵌套类，表示链表中的节点
