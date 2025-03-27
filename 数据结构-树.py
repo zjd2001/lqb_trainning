@@ -58,6 +58,7 @@ class BiTreeNode:
         self.data = data
         self.lchild = None # 左孩子
         self.rchild = None # 右孩子
+        self.parent = None
 
 a = BiTreeNode("A")
 b = BiTreeNode("B")
@@ -123,3 +124,46 @@ def leval_order(root):
             queue.append(node.rchild)
     # 循环直到队列为空，表示所有节点都已访问完毕
 leval_order(root)
+
+
+#二叉搜索树
+class BST:
+    def __init__(self):
+        self.root = None
+
+    # 递归实现插入
+    def insert(self, node, val): # node：要插入的节点,  val：需要插入的值
+        if not node: # 节点为空
+            node = BiTreeNode(val) # 直接插入
+        elif val < node.data: #node不为空时与val比较，此后node指当前正在处理的子树的根节点
+            node.lchild = self.insert(node.lchild, val) # val应插入到左子树中
+            node.lchild.parent = node
+        elif val > node.data:
+            node.rchild = self.insert(node.rchild, val) # val应插入到右子树中
+            node.rchild.parent = node
+        return node
+
+    # 不使用递归实现插入
+    def insert_no_rec(self, val):
+        p = self.root
+        if not p: #空树
+            self.root = BiTreeNode(val)
+            return
+        while True:
+            if val < p.data:
+                if p.lchild:
+                    p = p.lchild
+                else: # 左孩子不存在
+                    p.lchild = BiTreeNode(val)
+                    p.lchild.parent = p
+            elif val > p.data:
+                if p.rchild:
+                    p = p.rchild
+                else:
+                    p.rchild = BiTreeNode(val)
+                    p.rchild.parent = p
+                    return
+            else:
+                return
+
+
