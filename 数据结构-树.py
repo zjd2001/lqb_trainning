@@ -105,4 +105,21 @@ def post_order(root):
         post_order(root.rchild)
         print(root.data, end=',')
 
-post_order(root)
+#post_order(root)
+
+#层次遍历
+from collections import deque
+
+def leval_order(root):
+    queue = deque()
+    queue.append(root)
+    while len(queue) > 0: # 只要队不空
+        node = queue.popleft() # 从队列左侧出队一个节点,并打印
+        print(node.data, end=',')
+        # 将该节点的左子节点和右子节点依次加入队列（如果存在）
+        if node.lchild:
+            queue.append(node.lchild)
+        if node.rchild:
+            queue.append(node.rchild)
+    # 循环直到队列为空，表示所有节点都已访问完毕
+leval_order(root)
