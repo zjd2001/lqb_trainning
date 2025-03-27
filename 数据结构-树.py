@@ -1,0 +1,108 @@
+# 模拟文件系统
+class Node: #表示文件系统中的一个节点（默认是文件夹）
+    def __init__(self, name, type='dir'):
+        self.name = name # 文件名
+        self.type = type # "dir" or "file" 类型，即文件夹或文件
+        self.children = [] # 子节点列表，用于存储文件夹或文件
+        self.parent = None # 父节点，用于回溯目录结构
+
+    def __repr__(self):
+        return self.name #定义了当打印 Node 对象时的输出格式，直接返回 name
+
+class FileSystemTree:
+    def __init__(self):
+        self.root = Node("/") # 根目录，初始化为一个名为 / 的 Node 对象
+        self.now = self.root # 当前所在目录，初始为根目录
+
+    def mkdir(self, name): # 创建一个新的文件夹
+        if name[-1] != "/": # 如果输入的 name 不以 / 结尾，则自动补上 /
+            name += "/"
+        node = Node(name) # 创建新文件夹，并将其添加到当前目录的 children 列表中，新创建的文件夹的 parent 指向当前目录。
+        self.now.children.append(node)
+        node.parent = self.now
+
+    def ls(self): # 返回当前目录的所有子节点（文件夹或文件）
+        return self.now.children
+
+    def cd(self, name): # 用于切换当前目录。
+        if name[-1] != "/":
+            name += "/"
+        if name == "../": # 将当前目录切换到父目录
+            self.now = self.now.parent
+            return
+        for child in self.now.children: # 遍历当前目录的子节点，找到匹配的文件夹并切换到该目录
+            if child.name == name:
+                self.now = child
+                return
+        raise ValueError("invalid dir") # 无效目录
+
+"""
+tree = FileSystemTree()
+tree.mkdir("var/")
+tree.mkdir("bin/")
+tree.mkdir("usr/")
+# 在根目录下依次创建三个文件夹：var/、bin/ 和 usr/
+
+tree.cd("bin/")
+tree.mkdir("python/")
+# 切换到 bin/ 目录，在 bin/ 下创建一个子文件夹 python/
+
+tree.cd("../") # 切换回父目录（即根目录 /）
+print(tree.ls()) # 执行 ls()，返回根目录下的所有子节点
+"""
+
+
+# 二叉树
+class BiTreeNode:
+    def __init__(self, data):
+        self.data = data
+        self.lchild = None # 左孩子
+        self.rchild = None # 右孩子
+
+a = BiTreeNode("A")
+b = BiTreeNode("B")
+c = BiTreeNode("C")
+d = BiTreeNode("D")
+e = BiTreeNode("E")
+f = BiTreeNode("F")
+g = BiTreeNode("G")
+
+e.lchild = a
+e.rchild = g
+a.rchild = c
+c.lchild = b
+c.rchild = d
+g.rchild = f
+
+root = e
+
+#print(root.lchild.rchild.data)
+
+
+# 二叉树的遍历
+# 前序遍历
+def pre_order(root): # root 是二叉树的根节点，表示从该节点开始进行前序遍历
+    if root: # 当前节点是否为非空
+        print(root.data, end=',')
+        pre_order(root.lchild) # 递归调用,实现了对左子树的前序遍历
+        pre_order(root.rchild)
+
+#pre_order(root)
+
+#中序遍历
+def in_order(root):
+    if root:
+        in_order(root.lchild)
+        print(root.data, end=',')
+        in_order(root.rchild)
+
+#in_order(root)
+
+#后序遍历
+def post_order(root):
+    if root:
+        post_order(root.lchild)
+        post_order(root.rchild)
+        print(root.data, end=',')
+
+post_order(root)
