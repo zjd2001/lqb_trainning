@@ -137,7 +137,7 @@ class BST:
 
     # 插入，新节点总是作为叶子节点插入
     # 递归实现插入
-    def insert(self, node, val): # node：要插入的节点,  val：需要插入的值
+    def insert(self, node, val): # node：要插入的节点,初始为根用于递归  val：需要插入的值
         if not node: # 节点为空
             node = BiTreeNode(val) # 直接插入
         elif val < node.data: #node不为空时与val比较，此后node指当前正在处理的子树的根节点
@@ -185,6 +185,15 @@ class BST:
 
     # 不使用递归
     def query_no_rec(self, val):
+        p = self.root
+        while p:
+            if p.data < val:
+                p = p.rchild
+            elif p.data > val:
+                p = p.lchild
+            else:
+                return p
+        return None # p是空的，说明没有找到
 
     # 前序遍历
     def pre_order(self, root):
@@ -215,4 +224,15 @@ print("")
 tree.in_order(tree.root)
 print("")
 tree.post_order(tree.root)
+"""
+
+"""
+查询
+import random
+
+li = list(range(0, 500, 2))
+random.shuffle(li)
+
+tree = BST(li)
+print(tree.query_no_rec(3))
 """
