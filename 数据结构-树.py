@@ -135,6 +135,7 @@ class BST:
             for val in li:
                 self.insert_no_rec(val) # 循环插入
 
+
     # 插入，新节点总是作为叶子节点插入
     # 递归实现插入
     def insert(self, node, val): # node：要插入的节点,初始为根用于递归  val：需要插入的值
@@ -171,6 +172,7 @@ class BST:
             else:
                 return # 要插入的值 val 等于当前节点的值 p.data，则直接退出函数。这表明不允许插入重复值
 
+
     # 查询
     # 使用递归
     def query(self, node, val): # 需要查询的值val，node初始为根节点用于递归，后为正在比较的节点
@@ -194,6 +196,74 @@ class BST:
             else:
                 return p
         return None # p是空的，说明没有找到
+
+
+    # 删除
+    # node是待删除节点
+    def __remove_node_1(self, node):
+        # 情况1：node是叶子节点
+            # 直接删掉
+        if not node.parent: # node没有父节点，即它既是叶子又是根，只有它一个节点
+            self.root = None
+        if node == node.parent.lchild: # node是父的左孩子
+            node.parent.lchild = None
+            node.parent = None
+        else: # node是右孩子
+            node.parent.rchild = None
+            node.parent = None
+
+    def __remove_node_21(self, node):
+        # 情况2.1：node只有一个左孩子
+            # 用这个左孩子顶替node
+        if not node.parent: # node为根
+            self.root = node.lchild # node的左孩子成为根
+            node.lchild.parent = None
+        elif node == node.parent.lchild: # node为父的左孩子
+            node.parent.lchild = node.lchild # 删掉node后，要把node的左孩子连给父节点
+            node.lchild.parent = node.parent
+        else:
+            node.parent.rchild = node.lchild
+            node.lchild.parent = node.parent
+
+    def __remove_node_22(self, node):
+        # 情况2.2：node只有一个右孩子
+            # 用这个右孩子顶node
+        if not node.parent:
+            self.root = node.rchild
+        elif node == node.parent.lchild:
+            node.parent.lchild = node.rchild
+            node.rchild.parent = node.parent
+        else:
+            node.parent.rchild = node.rchild
+            node.rchild.parent = node.parent
+
+    def delete(self, val):
+        if self.root: # 不是空树
+            node = self.query_no_rec(val) # 查询到要删除值的位置
+            if not node: # 不存在
+                return False
+            if not node.lchild and not node.rchild: # 情况1
+                self.__remove_node_1(node)
+            elif not node.rchild: # 情况2.1
+                self.__remove_node_21(node)
+            elif not node.lchild: # 情况2.2
+                self.__remove_node_22(node)
+            else:
+                # 情况3：node两个孩子都有
+                    # 将node的右子树中的最小节点拿过来替换node，并从原处删除
+
+                min_node = node.rchild
+                while min_node.lchild:
+                    min_node = min_node.lchild # 如果有左孩子，说明还不是右子树中最小的，找到右子树的最后一个左孩子就是整个右子树最小的
+
+                node.data = min_node.data # 代替node节点的值，所以不用重新连接父子关系
+
+                # 把min_node从原处删掉
+                if min_node.rchild: # min_node有右孩子
+                    self.__remove_node_22(min_node)
+                else: # min_node是叶子节点
+                    self.__remove_node_1(min_node)
+
 
     # 前序遍历
     def pre_order(self, root):
@@ -235,4 +305,14 @@ random.shuffle(li)
 
 tree = BST(li)
 print(tree.query_no_rec(3))
+"""
+
+"""
+删除
+tree = BST([1,4,2,5,3,8,6,9,7])
+tree.in_order(tree.root)
+print("")
+
+tree.delete(4)
+tree.in_order(tree.root)
 """
