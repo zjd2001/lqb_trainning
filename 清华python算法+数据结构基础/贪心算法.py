@@ -13,7 +13,7 @@ def change(t, n):
 # 分数背包问题
 goods = [(60, 10), (120, 30), (100, 20)] # 每个商品的价格和重量
 goods.sort(key=lambda x: x[0]/x[1], reverse=True) #按单位价值降序排序
-print(goods)
+#print(goods)
 def fractional_backpack(goods, w): # w是背包容量
     m = [0 for _ in range(len(goods))] # 存每种商品拿多少走
     total_v = 0 # 装走的总价值
@@ -29,4 +29,25 @@ def fractional_backpack(goods, w): # w是背包容量
             break
     return total_v, m
 
-print(fractional_backpack(goods, 50))
+#print(fractional_backpack(goods, 50))
+
+
+
+# 拼接最大数字问题
+from functools import cmp_to_key
+li = [32, 94, 128, 128, 6, 71]
+
+def number_join(li):
+    li = list(map(str, li)) # 变成字符串        其中map(function, iterable)，对li每个元素应用str函数转换为字符串，list将其转换为列表
+    li.sort(key=cmp_to_key(xy_cmp)) # cmp_to_key 是一个工具函数，它将传统的比较函数（返回 -1、0 或 1 的函数）转换为适用于 key 参数的函数
+    return "".join(li)
+
+def xy_cmp(x, y):
+    if x+y < y+x:
+        return 1
+    elif x+y > y+x:
+        return -1
+    else:
+        return 0
+
+print(number_join(li))
