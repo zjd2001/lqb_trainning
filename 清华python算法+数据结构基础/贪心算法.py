@@ -50,4 +50,20 @@ def xy_cmp(x, y):
     else:
         return 0
 
-print(number_join(li))
+#print(number_join(li))
+
+
+# 活动选择问题
+# 要求选上的活动数最多，越早结束的活动留下的时间越多，更应该进入最优解
+activities = [(1,4),(3,5),(0,6),(5,7),(3,9),(5,9),(6,10),(8,11),(8,12),(2,14),(12,16)]
+# 按结束时间排序
+activities.sort(key=lambda x:x[1])
+
+def activity_selection(a):
+    res = [a[0]] # 把结束时间最早的活动先选上
+    for i in range(1, len(a)):
+        if a[i][0] >= res[-1][1]: # 如果当前遍历的活动开始时间晚于已选上的活动的结束时间
+            res.append(a[i])
+    return res
+
+print(activity_selection(activities))
