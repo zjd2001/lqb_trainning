@@ -63,3 +63,17 @@ def days_between_dates(date1, date2):
 #li.remove(Val) #按值删除第一个匹配的
 
 #列表降序排序： li.sort(reverse=True）
+
+#Excel算日期
+#日期间隔：=结束日期-开始日期+1    =DATE(2025,5,4)-DATE(2025,1,1)+1
+#星期计算：=WEEKDAY(日期单元格，2)    日期单元格内用2025-4-10格式
+
+
+def chufa(a, b):
+    #除法
+    a1 = a // b # 向下取整
+    a2 = (a + b - 1) // b # 向上取整
+    return a1, a2
+
+
+#求1-2025中0出现次数：excel下拉生成1-2025，粘贴至word，ctrl+h替换，查找内容0，替换为#，替换次数即答案（需要粘贴为文本格式）
